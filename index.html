@@ -1,58 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>أقوى منصة تعليمية في مصر | EduEgy</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<meta name="author" content="عمرو محمد عطية">
+<meta name="copyright" content="حقوق التطوير والتصميم محفوظة لعمرو محمد عطية">
+<title>مكتبة عمرو محمد عطية | مشغل الفيديو والصوت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Cairo',sans-serif}
-.animate-gradient{background:linear-gradient(-45deg,#1e3a8a,#1e40af,#065f46,#064e3b);background-size:400% 400%;animation:gradient 15s ease infinite}
-@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+:root{--bg:#071426;--panel:#0e2038;--panel2:#132944;--line:#233b58;--text:#f4f7fb;--muted:#a6b5c9;--accent:#66e3c4;--accent2:#7c9cff;--danger:#ff8793}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top right,#10294a 0,transparent 42%),var(--bg);color:var(--text);font-family:'Cairo',sans-serif;min-height:100vh}button,input,select{font:inherit}button,a{cursor:pointer}button{border:0}.wrap{width:min(1220px,92%);margin:auto}.topbar{position:sticky;top:0;z-index:10;background:#071426eF;border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}.brand{display:flex;gap:11px;align-items:center;font-size:1.25rem;font-weight:800}.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#071426;font-size:1.35rem}.nav small{display:block;color:var(--muted);font-size:.75rem;font-weight:500}.hero{padding:46px 0 30px}.eyebrow{color:var(--accent);font-weight:800;font-size:.9rem}.hero h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.2;margin:12px 0}.hero p{color:var(--muted);max-width:720px;line-height:1.9;margin:0}.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.stat{border:1px solid var(--line);background:#ffffff08;border-radius:13px;padding:10px 16px;color:var(--muted);font-size:.9rem}.stat b{color:var(--text);margin-left:5px}.layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.8fr);gap:22px;padding:12px 0 50px}.panel{background:linear-gradient(160deg,#10233c,#0b1a2d);border:1px solid var(--line);border-radius:22px;overflow:hidden}.panel-head{padding:19px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-head h2{margin:0;font-size:1.15rem}.player-wrap{background:#02060d;padding:12px}.player{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000;display:block}.now{padding:16px 20px}.now h3{margin:0 0 5px;font-size:1.2rem}.muted{color:var(--muted)}.now p{margin:0;color:var(--muted);font-size:.9rem}.player-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 13px;border-radius:11px;font-weight:700;transition:.2s}.btn:hover{border-color:var(--accent);transform:translateY(-1px)}.btn.primary{background:var(--accent);color:#06201c;border-color:transparent}.btn.ghost{background:transparent}.btn.danger{color:var(--danger)}.side-content{padding:16px}.field{width:100%;background:#071426;border:1px solid var(--line);border-radius:12px;padding:11px 13px;color:var(--text);outline:none}.field:focus{border-color:var(--accent)}.add-form{display:grid;gap:9px}.add-form h3{margin:0 0 4px}.hint{font-size:.78rem;color:var(--muted);line-height:1.7}.divider{height:1px;background:var(--line);margin:18px 0}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 15px}.section-title h2{font-size:1.35rem;margin:0}.library{padding:25px 0 55px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0 20px}.toolbar .field{flex:1;min-width:170px}.toolbar select{max-width:200px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.media-card{border:1px solid var(--line);background:linear-gradient(160deg,#11243b,#0b192a);border-radius:17px;overflow:hidden;min-width:0}.thumb{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#183654,#111c37);display:grid;place-items:center;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover}.thumb .play{position:absolute;background:#06111dd9;border:1px solid #ffffff55;border-radius:50%;width:48px;height:48px;display:grid;place-items:center;font-size:1.2rem}.type{position:absolute;top:9px;right:9px;background:#071426e8;border:1px solid #ffffff25;border-radius:8px;padding:3px 8px;font-size:.7rem}.card-body{padding:13px}.card-body h3{font-size:1rem;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card-body p{font-size:.8rem;color:var(--muted);margin:0 0 12px;min-height:24px}.card-actions{display:flex;gap:7px}.card-actions .btn{flex:1;padding:7px 8px;font-size:.82rem}.empty{grid-column:1/-1;text-align:center;padding:42px 16px;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}.empty strong{display:block;color:var(--text);font-size:1.1rem;margin-bottom:7px}.footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:.85rem;text-align:center}.toast{position:fixed;bottom:18px;left:18px;z-index:30;background:#d9fff4;color:#06201c;border-radius:12px;padding:12px 16px;box-shadow:0 12px 35px #0006;display:none;max-width:90vw}.small{font-size:.8rem}.audio-player{width:100%;margin-top:12px;accent-color:var(--accent)}.hidden{display:none!important}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-top:34px}}@media(max-width:560px){.wrap{width:94%}.nav{padding:10px 0}.nav .btn{padding:7px 10px;font-size:.8rem}.cards{grid-template-columns:1fr 1fr;gap:9px}.card-body{padding:10px}.card-body h3{font-size:.88rem}.card-actions{flex-direction:column}.hero h1{font-size:2rem}.panel-head{padding:15px}.side-content{padding:13px}}@media(max-width:370px){.cards{grid-template-columns:1fr}}
 </style>
 </head>
-<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+<body>
+<header class="topbar"><div class="wrap nav">
+  <div class="brand"><div class="logo">▶</div><div>مكتبتي <small>مشغل خاص — تطوير عمرو محمد عطية</small></div></div>
+  <a href="#library" class="btn primary" style="text-decoration:none">تصفّح مكتبتي ↓</a>
+</div></header>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">مساحة واحدة لكل محتواك</div>
+    <h1>مكتبتك الخاصة. تشغيل من داخل المكتبة.</h1>
+    <p>مكتبة فيديو وصوت بواجهة تشغيل داخلية. تُعرض الفيديوهات في المشغّل المدمج، مع إبقاء التنقل داخل المكتبة قدر الإمكان. حقوق التطوير والتصميم محفوظة لعمرو محمد عطية.</p>
+    <div class="stats"><div class="stat"><b id="videoCount">0</b> فيديو</div><div class="stat"><b id="audioCount">0</b> مقطع صوتي</div><div class="stat"><b id="totalCount">0</b> عنصر في المكتبة</div></div>
+  </section>
 
-<!-- Navbar -->
-<nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <h1 class="text-2xl font-extrabold text-blue-900">EduEgy</h1>
-    <a href="#dashboard" class="bg-blue-900 text-white px-6 py-2 rounded-full font-bold">دخول المنصة</a>
-  </div>
-</nav>
-
-<!-- Hero -->
-<section class="animate-gradient min-h-screen flex items-center justify-center text-white pt-20 px-6 text-center">
-  <div class="max-w-4xl">
-    <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">أقوى منصة تعليمية في مصر لإدارة شغلك كمدرس</h2>
-    <p class="text-xl opacity-90 mb-8">الطالب يدفع - الكورس يفتح تلقائي - الفلوس توصلك - بدون تدخل منك</p>
-    <div class="flex gap-4 justify-center flex-wrap">
-      <a href="#" class="bg-white text-blue-900 px-8 py-3 rounded-full font-bold">ابدأ مجاناً الآن</a>
-      <a href="#features" class="border-2 border-white px-8 py-3 rounded-full font-bold">شوف المميزات</a>
+  <section class="layout" id="dashboard">
+    <div class="panel">
+      <div class="panel-head"><h2>🎬 مشغّل الوسائط</h2><span class="muted small" id="playerLabel">اختر محتوى من مكتبتك</span></div>
+      <div class="player-wrap" id="playerArea"><div class="player" style="display:grid;place-items:center;color:#a6b5c9">▶ اختر فيديو لبدء المشاهدة</div></div>
+      <div class="now"><h3 id="nowTitle">أهلاً بك في مكتبتك الخاصة</h3><p id="nowDescription">أرسل الروابط ليتم تضمينها داخل المكتبة في نسخة الموقع المحدّثة.</p><div class="player-actions"><button class="btn" id="openOriginal">معلومات الرابط</button><button class="btn ghost" id="stopPlayer">إيقاف المشغّل</button></div></div>
     </div>
-    <div class="mt-12 grid grid-cols-3 gap-4 bg-white/10 p-6 rounded-2xl backdrop-blur">
-      <div><p class="text-3xl font-bold">+500</p><p class="text-sm">مدرس</p></div>
-      <div><p class="text-3xl font-bold">+20k</p><p class="text-sm">طالب</p></div>
-      <div><p class="text-3xl font-bold">24/7</p><p class="text-sm">دفع تلقائي</p></div>
-    </div>
-  </div>
-</section>
+    <aside class="panel">
+      <div class="panel-head"><h2>📥 تحديث المكتبة</h2></div>
+      <div class="side-content">
+        <div style="font-size:2.5rem;margin:4px 0 12px">🔗</div>
+        <h3 style="margin:0 0 8px">أرسل الروابط ليتم تضمينها داخل الموقع</h3>
+        <p class="muted" style="line-height:1.9;margin:0">أرسل روابط المحتوى ليتم تضمينها داخل ملف الموقع. تُعرض فيديوهات يوتيوب في مشغّل مدمج، وتعمل الملفات الصوتية والفيديوهات المباشرة من داخل المكتبة إذا كان الرابط يسمح بالتشغيل.</p>
+        <div class="divider"></div>
+        <p class="hint">هذه نسخة ثابتة المحتوى: تُضاف الروابط بتعديل ملف HTML نفسه. الفيديوهات المضمنة لا تفتح من أزرار الموقع إلى يوتيوب، لكن مشغّل يوتيوب المضمّن يظل تابعًا ليوتيوب وقد يعرض عناصر أو يمنع التشغيل وفق إعدادات المنصة.</p>
+        <div class="player-actions"><button class="btn" id="exportBtn">تصدير روابط المكتبة</button></div>
+      </div>
+    </aside>
+  </section>
 
-<!-- Features -->
-<section id="features" class="py-20 px-6 max-w-7xl mx-auto">
-  <h3 class="text-3xl font-extrabold text-center mb-12">ليه EduEgy مختلفة؟</h3>
-  <div class="grid md:grid-cols-3 gap-8">
-    <div class="bg-white p-8 rounded-2xl shadow-lg"><h4 class="font-bold text-xl mb-2">💳 دفع تلقائي</h4><p class="text-gray-600">فودافون كاش وفوري وباي موب يفتحوا الكورس لوحدهم</p></div>
-    <div class="bg-white p-8 rounded-2xl shadow-lg"><h4 class="font-bold text-xl mb-2">👨‍🎓 إدارة طلاب</h4><p class="text-gray-600">كود لكل طالب ومتابعة حضور ودرجات</p></div>
-    <div class="bg-white p-8 rounded-2xl shadow-lg"><h4 class="font-bold text-xl mb-2">📊 تقارير ذكية</h4><p class="text-gray-600">اعرف مين دفع ومين لسه وارباحك باليوم</p></div>
-  </div>
-</section>
-
-<footer class="bg-slate-950 text-white py-8 text-center">
-  <p>EduEgy © 2026 - المنصة شغالة بدون شاشة بيضاء ✅</p>
-</footer>
-
+  <section class="library" id="library">
+    <div class="section-title"><h2>📚 مكتبتي</h2><span class="muted small" id="resultCount">0 نتيجة</span></div>
+    <div class="toolbar"><input class="field" id="searchInput" placeholder="ابحث بالاسم أو التصنيف…"><select class="field" id="filterType"><option value="all">كل المحتوى</option><option value="youtube">فيديوهات يوتيوب</option><option value="audio">مقاطع صوتية</option><option value="video">فيديوهات مباشرة</option></select><select class="field" id="filterCategory"><option value="all">كل التصنيفات</option></select><button class="btn" id="clearSearch">مسح البحث</button></div>
+    <div class="cards" id="mediaGrid"></div>
+  </section>
+</main>
+<footer class="footer"><div class="wrap">© 2026 حقوق التطوير والتصميم © 2026 محفوظة لعمرو محمد عطية — مكتبة الفيديو والصوت.</div></footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+// تُضاف الروابط هنا داخل ملف HTML عند تحديث المكتبة.
+const items = [
+  {id:'youtube-oxcbwj0l3w', title:'الفيديو الأول', url:'https://youtu.be/OxCbwJ0-L3w?si=XGZRKA3Cvphl_39-', type:'youtube', category:'عام', youtubeId:'OxCbwJ0-L3w'}
+];
+let current=null, toastTimer;
+function save(){updateStats()}
+function notify(message){const el=$('toast');el.textContent=message;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',2600)}
+function safeUrl(raw){try{const u=new URL(raw);return ['https:','http:'].includes(u.protocol)?u:null}catch(e){return null}}
+function youtubeId(url){try{const u=new URL(url);let id='';if(u.hostname==='youtu.be'||u.hostname.endsWith('.youtu.be'))id=u.pathname.split('/').filter(Boolean)[0]||'';else if(u.hostname.includes('youtube.com')){id=u.searchParams.get('v')||'';if(!id){const p=u.pathname.split('/').filter(Boolean);if(['embed','shorts','live'].includes(p[0]))id=p[1]||''}}return /^[\w-]{11}$/.test(id)?id:''}catch(e){return''}}
+function detectType(url,chosen){if(chosen&&chosen!=='auto')return chosen;if(youtubeId(url))return'youtube';if(/\.(mp3|m4a|aac|ogg|wav|flac)(?:$|[?#])/i.test(url))return'audio';return'video'}
+function normalizedItem(title,url,type,category){const yt=youtubeId(url);return{id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),title:title.trim(),url:url.trim(),type:detectType(url,type),category:category||'عام',added:Date.now(),youtubeId:yt}}
+function updateStats(){$('videoCount').textContent=items.filter(x=>x.type==='youtube'||x.type==='video').length;$('audioCount').textContent=items.filter(x=>x.type==='audio').length;$('totalCount').textContent=items.length}
+function iconFor(type){return type==='audio'?'♫':type==='youtube'?'▶':'▣'}
+function typeName(type){return type==='audio'?'صوت':type==='youtube'?'يوتيوب':'فيديو مباشر'}
+function thumbnail(item){const id=item.youtubeId||youtubeId(item.url);return id?'https://i.ytimg.com/vi/'+encodeURIComponent(id)+'/hqdefault.jpg':''}
+function render(){
+ const query=$('searchInput').value.trim().toLowerCase(), type=$('filterType').value, cat=$('filterCategory').value;
+ const categories=[...new Set(items.map(x=>x.category||'عام'))].sort((a,b)=>a.localeCompare(b,'ar'));
+ const selected=$('filterCategory').value;
+ $('filterCategory').innerHTML='<option value="all">كل التصنيفات</option>'+categories.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');
+ if(categories.includes(selected))$('filterCategory').value=selected;
+ const list=items.filter(x=>(type==='all'||x.type===type)&&(cat==='all'||x.category===cat)&&((x.title+' '+x.category).toLowerCase().includes(query)));
+ $('resultCount').textContent=list.length+' نتيجة';
+ const grid=$('mediaGrid');grid.innerHTML='';
+ if(!list.length){grid.innerHTML='<div class="empty"><strong>المكتبة جاهزة للمحتوى ✨</strong>'+(items.length?'لا توجد نتائج مطابقة. جرّب تغيير البحث أو التصنيف.':'أرسل الروابط ليتم تضمينها داخل ملف الموقع.')+'</div>';return}
+ list.forEach(item=>{
+   const card=document.createElement('article');card.className='media-card';
+   const img=thumbnail(item);
+   card.innerHTML='<div class="thumb">'+(img?'<img loading="lazy" alt="" src="'+img+'">':'<span style="font-size:2.6rem">'+iconFor(item.type)+'</span>')+'<span class="type">'+typeName(item.type)+'</span><button class="play" aria-label="تشغيل">▶</button></div><div class="card-body"><h3 title="'+escapeHtml(item.title)+'">'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.category||'عام')+'</p><div class="card-actions"><button class="btn primary playBtn">تشغيل</button><button class="btn deleteBtn danger">حذف</button></div></div>';
+   card.querySelector('.play').addEventListener('click',()=>play(item));card.querySelector('.playBtn').addEventListener('click',()=>play(item));card.querySelector('.deleteBtn').addEventListener('click',()=>removeItem(item.id));grid.appendChild(card);
+ });
+}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function play(item){current=item;$('nowTitle').textContent=item.title;$('nowDescription').textContent=(item.category||'عام')+' • '+typeName(item.type);$('playerLabel').textContent=typeName(item.type);$('openOriginal').disabled=false;
+ const area=$('playerArea');area.innerHTML='';
+ if(item.type==='youtube'){
+   const id=item.youtubeId||youtubeId(item.url);
+   if(!id){area.innerHTML='<div class="player" style="display:grid;place-items:center;color:#fff">رابط يوتيوب غير واضح — استخدم زر فتح المصدر.</div>';return}
+   const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&disablekb=1&playsinline=1';iframe.title=item.title;iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.setAttribute('sandbox','allow-scripts allow-same-origin allow-presentation');area.appendChild(iframe);
+ }else{
+   const media=document.createElement(item.type==='audio'?'audio':'video');media.className='player';media.controls=true;media.autoplay=true;media.preload='metadata';media.playsInline=true;media.src=item.url;if(item.type==='audio')media.style.height='100px';area.appendChild(media);
+ }
+ $('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function stop(){current=null;$('playerArea').innerHTML='<div class="player" style="display:grid;place-items:center;color:#a6b5c9">▶ اختر فيديو لبدء المشاهدة</div>';$('nowTitle').textContent='أهلاً بك في مكتبتك الخاصة';$('nowDescription').textContent='أرسل الروابط ليتم تضمينها داخل المكتبة في نسخة الموقع المحدّثة.';$('playerLabel').textContent='اختر محتوى من مكتبتك'}
+function removeItem(id){const item=items.find(x=>x.id===id);if(!item)return;if(!confirm('حذف «'+item.title+'» من المكتبة؟'))return;items=items.filter(x=>x.id!==id);if(current&&current.id===id)stop();save();render();notify('تم حذف المحتوى')}
+$('searchInput').addEventListener('input',render);$('filterType').addEventListener('change',render);$('filterCategory').addEventListener('change',render);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';$('filterType').value='all';$('filterCategory').value='all';render()});
+$('openOriginal').addEventListener('click',()=>{if(current)notify('المحتوى يُشغّل داخل المكتبة؛ لا يتم فتح رابط خارجي من هذا الزر.')});$('stopPlayer').addEventListener('click',stop);
+$('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='maktabati-links.json';a.click();URL.revokeObjectURL(url);notify('تم تصدير روابط المكتبة')});
+$('openOriginal').disabled=true;updateStats();render();
+})();
+</script>
 </body>
 </html>
