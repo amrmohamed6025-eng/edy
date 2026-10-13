@@ -151,6 +151,10 @@ img,video,iframe,canvas,svg{max-width:100%}
 .media-mount iframe,.media-mount video,.media-mount audio{display:block;width:100%;height:100%;max-width:100%;border:0;border-radius:0;background:#000}
 .media-mount video{object-fit:contain}
 .media-mount audio{height:72px;align-self:end}
+.video-tap-zone{position:absolute;inset:0;z-index:3;display:none;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation}
+.player-stage.has-media .video-tap-zone{display:block}
+.video-controls.controls-hidden{opacity:0;visibility:hidden;pointer-events:none}
+.video-controls{visibility:visible}
 .player-placeholder{display:grid;place-items:center;width:100%;height:100%;color:#d7b56d;text-align:center;padding:20px}
 .video-controls{position:absolute;z-index:5;left:0;right:0;bottom:0;padding:clamp(8px,1.5vw,15px);background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.74) 26%,rgba(0,0,0,.96) 100%);display:flex;flex-direction:column;gap:8px;opacity:1;transition:opacity .25s ease}
 .video-controls-main,.video-controls-extra{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
@@ -206,12 +210,33 @@ img,video,iframe,canvas,svg{max-width:100%}
 }
 @media(max-width:380px){.video-controls-extra{display:flex}.control-icon{min-width:32px}.control-setting select{max-width:75px}.volume-setting input{width:44px}}
 
+
+/* Reliable auto-hide for the custom player toolbar */
+.player-stage .video-controls.controls-hidden{display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.theme-toggle{white-space:nowrap}
+/* Light theme: keep the gold identity, switch surfaces and text for readability */
+body[data-theme="light"]{--bg:#f4f1e9;--panel:#ffffff;--panel2:#f1eadb;--line:#dfd3b8;--text:#242018;--muted:#746c5d;background:radial-gradient(ellipse at 12% 8%,rgba(215,181,109,.18),transparent 34%),linear-gradient(145deg,#fffdf7 0%,#f3eee2 55%,#fff 100%);color:var(--text)}
+body[data-theme="light"] .topbar{background:rgba(255,253,247,.94);border-bottom-color:var(--line)}
+body[data-theme="light"] .panel,body[data-theme="light"] .media-card{background:linear-gradient(160deg,#fff,#f8f4ea);border-color:var(--line);box-shadow:0 14px 35px rgba(72,54,20,.08)}
+body[data-theme="light"] .stat{background:rgba(255,255,255,.75);border-color:var(--line);color:var(--muted)}
+body[data-theme="light"] .stat b{color:#9a7021}
+body[data-theme="light"] .field{background:#fffdf8;color:#242018;border-color:var(--line)}
+body[data-theme="light"] .btn:not(.primary){background:#fffdf7;color:#302819;border-color:var(--line)}
+body[data-theme="light"] .btn.ghost{background:transparent}
+body[data-theme="light"] .card-body h3,body[data-theme="light"] .now h3,body[data-theme="light"] .panel-head h2,body[data-theme="light"] .section-title h2,body[data-theme="light"] .add-form h3{color:#282319}
+body[data-theme="light"] .subject-heading{color:#8a641e;background:linear-gradient(90deg,#d7b56d20,transparent);border-color:#d7b56d66}
+body[data-theme="light"] .footer{border-color:var(--line)}
+body[data-theme="light"] .player-wrap{background:#e7dfce}
+body[data-theme="light"] .welcome-screen{background:radial-gradient(ellipse at 50% 35%,#f2dfb3 0,transparent 38%),linear-gradient(145deg,#fffdf6 0%,#f0e7d3 30.2%,#242018 30.4%,#080808 100%)}
+@media(max-width:640px){.nav-actions{gap:6px}.nav-actions .btn{font-size:.72rem;padding:7px 8px}}
+
 </style>
 </head>
 <body>
 <header class="topbar"><div class="wrap nav">
   <div class="brand"><div class="logo">▶</div><div>مكتبتي <small>برعاية وتطوير عمرو محمد</small></div></div>
-  <a href="#library" class="btn primary" style="text-decoration:none">تصفّح مكتبتي ↓</a>
+  <div class="nav-actions"><button type="button" class="btn theme-toggle" id="themeToggle" aria-label="تغيير المظهر">☀️ الوضع الفاتح</button><a href="#library" class="btn primary" style="text-decoration:none">تصفّح مكتبتي ↓</a></div>
 </div></header>
 <section id="welcomeScreen" class="welcome-screen intro-screen" aria-label="مقدمة المكتبة">
   <div class="intro-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -239,6 +264,7 @@ img,video,iframe,canvas,svg{max-width:100%}
       <div class="player-wrap">
         <div class="player-stage" id="playerArea">
           <div id="mediaMount" class="media-mount"><div class="player-placeholder">▶ اختر فيديو لبدء المشاهدة</div></div>
+          <button type="button" id="videoTapZone" class="video-tap-zone" aria-label="إظهار أدوات تشغيل الفيديو"></button>
           <div id="customControls" class="video-controls hidden" aria-label="أدوات تشغيل الفيديو">
             <div class="video-controls-main">
               <button class="control-icon" id="playPauseBtn" aria-label="تشغيل أو إيقاف مؤقت" title="تشغيل / إيقاف">▶</button>
@@ -283,6 +309,17 @@ img,video,iframe,canvas,svg{max-width:100%}
 (function(){
 'use strict';
 const $=id=>document.getElementById(id);
+const savedTheme=localStorage.getItem('maktabati-theme')||'dark';
+function applyTheme(theme){
+ document.body.dataset.theme=theme;
+ const light=theme==='light';
+ const btn=$('themeToggle');
+ if(btn){btn.textContent=light?'🌙 الوضع الداكن':'☀️ الوضع الفاتح';btn.setAttribute('aria-label',light?'التبديل للوضع الداكن':'التبديل للوضع الفاتح');}
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?'#fffdf7':'#090909';
+}
+applyTheme(savedTheme);
+$('themeToggle').addEventListener('click',()=>{const next=document.body.dataset.theme==='light'?'dark':'light';localStorage.setItem('maktabati-theme',next);applyTheme(next)});
+
 document.body.classList.add('landing-mode');
 $('enterLibrary').addEventListener('click',()=>{
   $('welcomeScreen').classList.add('hidden');
@@ -333,6 +370,18 @@ function render(){
 }
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 let ytPlayer=null, ytApiLoading=false, ytReadyCallbacks=[];
+let controlsHideTimer=null;
+function showVideoControls(){
+ const controls=$('customControls');
+ if(!current||!controls||controls.classList.contains('hidden'))return;
+ controls.classList.remove('controls-hidden');
+ clearTimeout(controlsHideTimer);
+ controlsHideTimer=setTimeout(()=>{
+   controls.classList.add('controls-hidden');
+ },2200);
+}
+function hideVideoControls(){clearTimeout(controlsHideTimer);$('customControls').classList.add('controls-hidden')}
+
 function loadYouTubeAPI(callback){
  if(window.YT&&window.YT.Player){callback();return}
  ytReadyCallbacks.push(callback);
@@ -355,7 +404,10 @@ function syncPlayButton(state){
 }
 function play(item){
  current=item;ytPlayer=null;
- $('customControls').classList.remove('hidden');
+ clearTimeout(controlsHideTimer);
+ $('playerArea').classList.add('has-media');
+ $('customControls').classList.remove('hidden','controls-hidden');
+ showVideoControls();
  $('controlsHint').textContent=item.type==='youtube'?'أدوات داخلية للمشغل؛ قد تختلف الجودة والترجمة حسب الفيديو.':'تعمل السرعة والصوت مع الملفات المباشرة؛ الجودة والترجمة حسب دعم الملف.';
  $('nowTitle').textContent=item.title;
  $('nowDescription').textContent=(item.category||'عام')+' • '+typeName(item.type);
@@ -381,7 +433,7 @@ function play(item){
    });
  }else{
    const media=document.createElement(item.type==='audio'?'audio':'video');
-   media.className='player';media.controls=true;media.autoplay=true;media.preload='metadata';media.playsInline=true;media.src=item.url;
+   media.className='player';media.controls=false;media.autoplay=true;media.preload='metadata';media.playsInline=true;media.src=item.url;
    if(item.type==='audio'){media.style.height='72px';media.style.alignSelf='end'}
    mount.appendChild(media);
    media.addEventListener('play',()=>syncPlayButton(1));
@@ -406,25 +458,32 @@ $('forward10Btn').addEventListener('click',()=>{
  const m=activeMedia();if(m)m.currentTime=Math.min(m.duration||Infinity,m.currentTime+10);
  else if(isYouTube())ytCall('seekTo',ytPlayer.getCurrentTime()+10,true);
 });
-$('speedSelect').addEventListener('change',()=>{
+$('speedSelect').addEventListener('change',()=>{showVideoControls();
  const rate=Number($('speedSelect').value),m=activeMedia();
  if(m)m.playbackRate=rate;else if(isYouTube())ytCall('setPlaybackRate',rate);
 });
-$('volumeControl').addEventListener('input',()=>{
+$('volumeControl').addEventListener('input',()=>{showVideoControls();
  const volume=Number($('volumeControl').value),m=activeMedia();
  if(m)m.volume=volume;else if(isYouTube())ytCall('setVolume',Math.round(volume*100));
 });
-$('qualitySelect').addEventListener('change',()=>{
+$('qualitySelect').addEventListener('change',()=>{showVideoControls();
  const v=$('qualitySelect').value;
  if(isYouTube()){if(v==='default')ytCall('setPlaybackQuality','default');else ytCall('setPlaybackQuality',v)}
  else notify('الجودة يحددها الملف أو الخادم');
 });
-$('captionSelect').addEventListener('change',()=>{
+$('captionSelect').addEventListener('change',()=>{showVideoControls();
  if(isYouTube()){
    if($('captionSelect').value==='on'){ytCall('loadModule','captions');setTimeout(()=>{try{ytPlayer.setOption('captions','track',{})}catch(_){}},250)}
    else {ytCall('unloadModule','captions')}
  }else notify('الترجمة للملفات المباشرة تحتاج ملف ترجمة منفصلًا');
 });
+$('videoTapZone').addEventListener('click',()=>showVideoControls());
+$('playerArea').addEventListener('pointermove',()=>{if(current)showVideoControls()},{passive:true});
+$('playerArea').addEventListener('touchstart',()=>{if(current)showVideoControls()},{passive:true});
+$('customControls').addEventListener('click',()=>showVideoControls());
+$('customControls').addEventListener('pointerdown',()=>{clearTimeout(controlsHideTimer)});
+$('customControls').addEventListener('focusin',()=>clearTimeout(controlsHideTimer));
+$('customControls').addEventListener('focusout',()=>showVideoControls());
 $('fullscreenBtn').addEventListener('click',async()=>{
  const stage=$('playerArea');
  try{
@@ -438,7 +497,7 @@ document.addEventListener('fullscreenchange',()=>{
  $('fullscreenBtn').textContent=document.fullscreenElement?'⛶':'⛶';
  $('fullscreenBtn').title=document.fullscreenElement?'إنهاء التكبير':'تكبير المشغل';
 });
-function stop(){if(ytPlayer){try{ytPlayer.destroy()}catch(_){}ytPlayer=null}$('customControls').classList.add('hidden');current=null;$('mediaMount').innerHTML='<div class="player-placeholder">▶ اختر فيديو لبدء المشاهدة</div>';$('nowTitle').textContent='أهلاً بك في مكتبة عمرو محمد';$('nowDescription').textContent='اختر فيديو من المكتبة لبدء المشاهدة.';$('playerLabel').textContent='اختر محتوى من مكتبتك';syncPlayButton(-1)}
+function stop(){clearTimeout(controlsHideTimer);if(ytPlayer){try{ytPlayer.destroy()}catch(_){}ytPlayer=null}$('playerArea').classList.remove('has-media');$('customControls').classList.add('hidden');$('customControls').classList.remove('controls-hidden');current=null;$('mediaMount').innerHTML='<div class="player-placeholder">▶ اختر فيديو لبدء المشاهدة</div>';$('nowTitle').textContent='أهلاً بك في مكتبة عمرو محمد';$('nowDescription').textContent='اختر فيديو من المكتبة لبدء المشاهدة.';$('playerLabel').textContent='اختر محتوى من مكتبتك';syncPlayButton(-1)}
 function removeItem(id){const item=items.find(x=>x.id===id);if(!item)return;if(!confirm('حذف «'+item.title+'» من المكتبة؟'))return;items=items.filter(x=>x.id!==id);if(current&&current.id===id)stop();save();render();notify('تم حذف المحتوى')}
 $('searchInput').addEventListener('input',render);$('filterType').addEventListener('change',render);$('filterCategory').addEventListener('change',render);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';$('filterType').value='all';$('filterCategory').value='all';render()});
 $('openOriginal').addEventListener('click',()=>{if(current)notify('الفيديو الحالي: '+current.title)});$('stopPlayer').addEventListener('click',stop);
