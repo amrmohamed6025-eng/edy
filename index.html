@@ -231,6 +231,38 @@ body[data-theme="light"] .player-wrap{background:#e7dfce}
 body[data-theme="light"] .welcome-screen{background:radial-gradient(ellipse at 50% 35%,#f2dfb3 0,transparent 38%),linear-gradient(145deg,#fffdf6 0%,#f0e7d3 30.2%,#242018 30.4%,#080808 100%)}
 @media(max-width:640px){.nav-actions{gap:6px}.nav-actions .btn{font-size:.72rem;padding:7px 8px}}
 
+
+/* Compact player toolbar: keep the video visible and reveal advanced options only on demand. */
+.player-stage .video-controls{
+  left:0;right:0;bottom:0;gap:0;padding:5px 7px 6px;
+  background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.62) 38%,rgba(0,0,0,.88) 100%);
+  display:flex;flex-direction:column;align-items:stretch;
+}
+.player-stage .video-controls-main{
+  display:flex;flex-wrap:nowrap;justify-content:flex-start;align-items:center;gap:5px;
+  width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+  padding:3px 4px;border:0;border-radius:8px;background:rgba(8,8,8,.62);backdrop-filter:blur(5px);
+}
+.player-stage .video-controls-main::-webkit-scrollbar{display:none}
+.player-stage .control-icon{flex:0 0 auto;min-width:29px;width:auto;height:29px;padding:0 7px;border-radius:7px;font-size:.82rem;box-shadow:none}
+.player-stage .control-setting{flex:0 0 auto;gap:4px;padding:3px 5px;border:0;border-radius:7px;background:rgba(255,255,255,.08);font-size:.65rem}
+.player-stage .control-setting select{min-height:24px;max-width:67px;padding:2px 4px;font-size:.68rem}
+.player-stage .volume-setting input{width:48px}
+.player-stage .video-controls-extra{display:none;flex-wrap:nowrap;justify-content:flex-start;gap:6px;padding:5px 4px 2px;border:0;overflow-x:auto}
+.player-stage .video-controls.show-extra .video-controls-extra{display:flex}
+.player-stage .video-controls-extra .control-setting{font-size:.68rem}
+.player-stage .controls-note{display:none}
+.player-stage .more-controls-button{font-size:1.15rem;min-width:30px;background:rgba(215,181,109,.2)}
+@media(max-width:560px){
+ .player-stage .video-controls{padding:3px 4px 4px}
+ .player-stage .video-controls-main{gap:3px;padding:2px}
+ .player-stage .control-icon{min-width:27px;height:27px;padding:0 5px;font-size:.76rem}
+ .player-stage .control-setting{font-size:.61rem;padding:2px 3px;gap:3px}
+ .player-stage .control-setting select{max-width:60px;min-height:22px;font-size:.64rem}
+ .player-stage .volume-setting input{width:38px}
+}
+@media(prefers-reduced-motion:reduce){.player-stage .video-controls{transition:none}}
+
 </style>
 </head>
 <body>
@@ -273,6 +305,7 @@ body[data-theme="light"] .welcome-screen{background:radial-gradient(ellipse at 5
               <label class="control-setting">السرعة <select id="speedSelect"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select></label>
               <label class="control-setting volume-setting" title="مستوى الصوت">🔊 <input id="volumeControl" type="range" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت"></label>
               <button class="control-icon fullscreen-button" id="fullscreenBtn" aria-label="تكبير المشغل" title="تكبير المشغل">⛶</button>
+              <button class="control-icon more-controls-button" id="moreControlsBtn" aria-label="المزيد من إعدادات المشغل" aria-expanded="false" title="الجودة والترجمة">⋯</button>
             </div>
             <div class="video-controls-extra">
               <label class="control-setting">الجودة <select id="qualitySelect"><option value="default">تلقائي</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select></label>
@@ -378,9 +411,11 @@ function showVideoControls(){
  clearTimeout(controlsHideTimer);
  controlsHideTimer=setTimeout(()=>{
    controls.classList.add('controls-hidden');
- },2200);
+   controls.classList.remove('show-extra');
+   const more=$('moreControlsBtn');if(more)more.setAttribute('aria-expanded','false');
+ },1500);
 }
-function hideVideoControls(){clearTimeout(controlsHideTimer);$('customControls').classList.add('controls-hidden')}
+function hideVideoControls(){clearTimeout(controlsHideTimer);$('customControls').classList.add('controls-hidden');$('customControls').classList.remove('show-extra');const more=$('moreControlsBtn');if(more)more.setAttribute('aria-expanded','false')}
 
 function loadYouTubeAPI(callback){
  if(window.YT&&window.YT.Player){callback();return}
@@ -482,8 +517,16 @@ $('playerArea').addEventListener('pointermove',()=>{if(current)showVideoControls
 $('playerArea').addEventListener('touchstart',()=>{if(current)showVideoControls()},{passive:true});
 $('customControls').addEventListener('click',()=>showVideoControls());
 $('customControls').addEventListener('pointerdown',()=>{clearTimeout(controlsHideTimer)});
-$('customControls').addEventListener('focusin',()=>clearTimeout(controlsHideTimer));
+$('customControls').addEventListener('focusin',()=>showVideoControls());
 $('customControls').addEventListener('focusout',()=>showVideoControls());
+$('moreControlsBtn').addEventListener('click',(event)=>{
+ event.stopPropagation();
+ const controls=$('customControls');
+ const expanded=!controls.classList.contains('show-extra');
+ controls.classList.toggle('show-extra',expanded);
+ $('moreControlsBtn').setAttribute('aria-expanded',String(expanded));
+ showVideoControls();
+});
 $('fullscreenBtn').addEventListener('click',async()=>{
  const stage=$('playerArea');
  try{
