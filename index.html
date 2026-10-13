@@ -140,6 +140,44 @@ img,video,iframe,canvas,svg{max-width:100%}
 @media(max-width:380px){.wrap{width:calc(100% - 22px)}.brand{font-size:.94rem}.nav .btn{padding:7px 8px;font-size:.7rem}.cards{grid-template-columns:1fr}.card-actions{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.toolbar #searchInput,.toolbar #clearSearch{grid-column:1}.stats{display:grid;grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}}
 @media(min-width:1500px){.wrap{width:min(1320px,calc(100% - 80px))}.cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.intro-screen:before,.intro-screen:after,.intro-stars i,.intro-line:before,.intro-line:after,.intro-title,.intro-credit,.intro-enter,.intro-overline{animation:none!important;opacity:1!important;transform:none!important}.intro-line:before{transform:scaleX(1)!important}html{scroll-behavior:auto}}
+
+/* Custom in-video controls: all playback buttons belong to our player, not YouTube's UI. */
+.intro-credit-top{display:flex;flex-direction:column;align-items:center;gap:2px;margin:clamp(17px,3vh,28px) 0 0;opacity:0;animation:introTextIn .8s .65s ease forwards;color:#bfb39a;font-size:clamp(.9rem,2.2vw,1.15rem);letter-spacing:.02em}
+.intro-credit-top strong{display:block;font-size:clamp(1.8rem,5.6vw,3.3rem);line-height:1.18;font-weight:900;letter-spacing:.01em;color:#f2d58c;text-shadow:0 0 22px rgba(215,181,109,.28),0 2px 0 #6b4c19}
+.intro-credit-top span{font-size:.85em;color:#c2b18b}
+.player-wrap{padding:8px;background:#030303}
+.player-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;isolation:isolate}
+.media-mount{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;background:#000}
+.media-mount iframe,.media-mount video,.media-mount audio{display:block;width:100%;height:100%;max-width:100%;border:0;border-radius:0;background:#000}
+.media-mount video{object-fit:contain}
+.media-mount audio{height:72px;align-self:end}
+.player-placeholder{display:grid;place-items:center;width:100%;height:100%;color:#d7b56d;text-align:center;padding:20px}
+.video-controls{position:absolute;z-index:5;left:0;right:0;bottom:0;padding:clamp(8px,1.5vw,15px);background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.74) 26%,rgba(0,0,0,.96) 100%);display:flex;flex-direction:column;gap:8px;opacity:1;transition:opacity .25s ease}
+.video-controls-main,.video-controls-extra{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.control-icon{min-width:36px;height:34px;padding:0 9px;border-radius:9px;border:1px solid rgba(227,196,123,.32);background:rgba(16,15,12,.9);color:#f8e7b7;font-size:1rem;font-weight:800;cursor:pointer}
+.control-icon:hover{background:#d7b56d;color:#111;border-color:#fff0c2}
+.control-setting{display:inline-flex;align-items:center;gap:5px;color:#f1e4c6;font-size:.73rem;white-space:nowrap}
+.control-setting select{max-width:100px;background:#17150f;color:#fff2cc;border:1px solid rgba(215,181,109,.35);border-radius:7px;padding:5px 6px;font:inherit}
+.volume-setting input{width:clamp(48px,9vw,90px);accent-color:#d7b56d}
+.video-controls-extra{padding-top:7px;border-top:1px solid rgba(215,181,109,.18)}
+.controls-note{font-size:.68rem;color:#b8ad96;margin-inline-start:auto}
+.player-stage:fullscreen{width:100vw;height:100vh;max-width:none;aspect-ratio:auto;border-radius:0;background:#000}
+.player-stage:fullscreen .media-mount{width:100%;height:100%}
+.player-stage:fullscreen .media-mount iframe,.player-stage:fullscreen .media-mount video{width:100%;height:100%}
+.player-stage:fullscreen .video-controls{padding:clamp(12px,2vw,24px)}
+.player-stage:fullscreen .control-icon{height:42px;min-width:44px}
+@media(max-width:560px){
+ .player-wrap{padding:5px}.player-stage{border-radius:10px}
+ .video-controls{gap:5px;padding:6px}
+ .video-controls-main,.video-controls-extra{gap:5px}
+ .control-icon{height:30px;min-width:31px;padding:0 6px;font-size:.84rem}
+ .control-setting{font-size:.66rem;gap:3px}
+ .control-setting select{max-width:76px;padding:4px 3px}
+ .volume-setting input{width:45px}
+ .controls-note{display:none}
+}
+@media(max-width:380px){.video-controls-extra{display:none}.control-icon{min-width:29px}}
+
 </style>
 </head>
 <body>
@@ -151,10 +189,10 @@ img,video,iframe,canvas,svg{max-width:100%}
   <div class="intro-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="intro-content">
     <div class="intro-overline">مكتبة تعليمية متكاملة</div>
+    <p class="intro-credit intro-credit-top"><span>برعاية وتطوير</span><strong>عمرو محمد</strong></p>
     <div class="intro-line" aria-hidden="true"><span></span></div>
     <h1 class="intro-title">مكتبتي</h1>
     <div class="intro-line intro-line-bottom" aria-hidden="true"><span></span></div>
-    <p class="intro-credit">برعاية وتطوير <strong>عمرو محمد</strong></p>
     <button class="btn primary welcome-enter intro-enter" id="enterLibrary">دخول المكتبة <span aria-hidden="true">←</span></button>
   </div>
   <div class="intro-signature" aria-hidden="true">AM</div>
@@ -170,7 +208,26 @@ img,video,iframe,canvas,svg{max-width:100%}
   <section class="layout" id="dashboard">
     <div class="panel">
       <div class="panel-head"><h2>🎬 مشغّل الوسائط</h2><span class="muted small" id="playerLabel">اختر محتوى من مكتبتك</span></div>
-      <div class="player-wrap" id="playerArea"><div class="player" style="display:grid;place-items:center;color:#d7b56d">▶ اختر فيديو لبدء المشاهدة</div></div><div id="customControls" class="now hidden"><div class="player-actions"><button class="btn" id="playPauseBtn">▶ تشغيل / إيقاف</button><button class="btn" id="back10Btn">↶ 10 ث</button><button class="btn" id="forward10Btn">10 ث ↷</button><label class="small muted">السرعة <select id="speedSelect" class="field" style="display:inline-block;width:auto;padding:6px 8px"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select></label><label class="small muted">الصوت <input id="volumeControl" type="range" min="0" max="1" step="0.05" value="1" style="width:100px;vertical-align:middle"></label><label class="small muted">الجودة <select id="qualitySelect" class="field" style="display:inline-block;width:auto;padding:6px 8px"><option value="default">تلقائي</option><option value="hd1080">1080p (إن توفرت)</option><option value="hd720">720p (إن توفرت)</option></select></label><label class="small muted">الترجمة <select id="captionSelect" class="field" style="display:inline-block;width:auto;padding:6px 8px"><option value="off">إيقاف</option><option value="on">تشغيل (إن توفرت)</option></select></label></div><p class="hint" id="controlsHint">تختلف الخيارات المتاحة حسب نوع الفيديو ومصدره.</p></div>
+      <div class="player-wrap">
+        <div class="player-stage" id="playerArea">
+          <div id="mediaMount" class="media-mount"><div class="player-placeholder">▶ اختر فيديو لبدء المشاهدة</div></div>
+          <div id="customControls" class="video-controls hidden" aria-label="أدوات تشغيل الفيديو">
+            <div class="video-controls-main">
+              <button class="control-icon" id="playPauseBtn" aria-label="تشغيل أو إيقاف مؤقت" title="تشغيل / إيقاف">▶</button>
+              <button class="control-icon" id="back10Btn" aria-label="رجوع 10 ثوانٍ" title="رجوع 10 ثوانٍ">↶10</button>
+              <button class="control-icon" id="forward10Btn" aria-label="تقديم 10 ثوانٍ" title="تقديم 10 ثوانٍ">10↷</button>
+              <label class="control-setting">السرعة <select id="speedSelect"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select></label>
+              <label class="control-setting volume-setting" title="مستوى الصوت">🔊 <input id="volumeControl" type="range" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت"></label>
+              <button class="control-icon fullscreen-button" id="fullscreenBtn" aria-label="تكبير المشغل" title="تكبير المشغل">⛶</button>
+            </div>
+            <div class="video-controls-extra">
+              <label class="control-setting">الجودة <select id="qualitySelect"><option value="default">تلقائي</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select></label>
+              <label class="control-setting">الترجمة <select id="captionSelect"><option value="off">إيقاف</option><option value="on">تشغيل</option></select></label>
+              <span class="controls-note" id="controlsHint">خيارات المشغل حسب دعم الفيديو.</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="now"><h3 id="nowTitle">أهلاً بك في مكتبة عمرو محمد</h3><p id="nowDescription">اختر فيديو من المكتبة لبدء المشاهدة.</p><div class="player-actions"><button class="btn" id="openOriginal">معلومات الرابط</button><button class="btn ghost" id="stopPlayer">إيقاف المشغّل</button></div></div>
     </div>
     <aside class="panel">
@@ -247,38 +304,118 @@ function render(){
  });
 }
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function play(item){current=item;$('customControls').classList.remove('hidden');$('controlsHint').textContent=item.type==='youtube'?'خيارات السرعة والجودة والترجمة تعتمد على دعم مشغّل يوتيوب المضمّن.':'تعمل أدوات السرعة والصوت للملفات المباشرة؛ الترجمة والجودة تحتاج دعم الملف أو مصدره.';$('nowTitle').textContent=item.title;$('nowDescription').textContent=(item.category||'عام')+' • '+typeName(item.type);$('playerLabel').textContent=typeName(item.type);$('openOriginal').disabled=false;
- const area=$('playerArea');area.innerHTML='';
+let ytPlayer=null, ytApiLoading=false, ytReadyCallbacks=[];
+function loadYouTubeAPI(callback){
+ if(window.YT&&window.YT.Player){callback();return}
+ ytReadyCallbacks.push(callback);
+ if(ytApiLoading)return;
+ ytApiLoading=true;
+ const prior=window.onYouTubeIframeAPIReady;
+ window.onYouTubeIframeAPIReady=function(){
+   if(typeof prior==='function')try{prior()}catch(_){}
+   ytApiLoading=false;
+   const callbacks=ytReadyCallbacks.slice();ytReadyCallbacks=[];
+   callbacks.forEach(fn=>{try{fn()}catch(e){console.error(e)}});
+ };
+ const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.async=true;
+ document.head.appendChild(script);
+}
+function syncPlayButton(state){
+ const b=$('playPauseBtn');if(!b)return;
+ b.textContent=state===1?'Ⅱ':'▶';
+ b.title=state===1?'إيقاف مؤقت':'تشغيل';
+}
+function play(item){
+ current=item;ytPlayer=null;
+ $('customControls').classList.remove('hidden');
+ $('controlsHint').textContent=item.type==='youtube'?'أدوات داخلية للمشغل؛ قد تختلف الجودة والترجمة حسب الفيديو.':'تعمل السرعة والصوت مع الملفات المباشرة؛ الجودة والترجمة حسب دعم الملف.';
+ $('nowTitle').textContent=item.title;
+ $('nowDescription').textContent=(item.category||'عام')+' • '+typeName(item.type);
+ $('playerLabel').textContent=typeName(item.type);
+ $('openOriginal').disabled=false;
+ const mount=$('mediaMount');mount.innerHTML='';
  if(item.type==='youtube'){
    const id=item.youtubeId||youtubeId(item.url);
-   if(!id){area.innerHTML='<div class="player" style="display:grid;place-items:center;color:#fff">رابط يوتيوب غير واضح — استخدم زر فتح المصدر.</div>';return}
-   const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0&iv_load_policy=3&playsinline=1&controls=1&enablejsapi=1&cc_load_policy=0';iframe.title=item.title;iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;iframe.referrerPolicy='strict-origin-when-cross-origin';area.appendChild(iframe);
+   if(!id){mount.innerHTML='<div class="player-placeholder">رابط يوتيوب غير واضح.</div>';return}
+   const holder=document.createElement('div');holder.id='youtubePlayerMount';holder.style.cssText='width:100%;height:100%';mount.appendChild(holder);
+   loadYouTubeAPI(()=>{
+     if(!current||current.id!==item.id||!document.getElementById('youtubePlayerMount'))return;
+     ytPlayer=new YT.Player('youtubePlayerMount',{
+       width:'100%',height:'100%',videoId:id,
+       playerVars:{autoplay:1,controls:0,disablekb:1,fs:0,rel:0,playsinline:1,iv_load_policy:3,modestbranding:1,enablejsapi:1},
+       events:{
+         onReady:function(e){
+           if(current&&current.id===item.id){e.target.playVideo();e.target.setVolume(Math.round(Number($('volumeControl').value)*100));syncPlayButton(e.target.getPlayerState())}
+         },
+         onStateChange:function(e){if(current&&current.id===item.id)syncPlayButton(e.data)}
+       }
+     });
+   });
  }else{
-   const media=document.createElement(item.type==='audio'?'audio':'video');media.className='player';media.controls=true;media.autoplay=true;media.preload='metadata';media.playsInline=true;media.src=item.url;if(item.type==='audio')media.style.height='100px';area.appendChild(media);
+   const media=document.createElement(item.type==='audio'?'audio':'video');
+   media.className='player';media.controls=true;media.autoplay=true;media.preload='metadata';media.playsInline=true;media.src=item.url;
+   if(item.type==='audio'){media.style.height='72px';media.style.alignSelf='end'}
+   mount.appendChild(media);
+   media.addEventListener('play',()=>syncPlayButton(1));
+   media.addEventListener('pause',()=>syncPlayButton(2));
+   media.play().catch(()=>{});
  }
  $('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
-function activeMedia(){return $('playerArea').querySelector('video, audio')}
-function isYouTube(){return !!$('playerArea').querySelector('iframe')}
-function ytCommand(func,args=[]){const frame=$('playerArea').querySelector('iframe');if(frame&&frame.contentWindow)frame.contentWindow.postMessage(JSON.stringify({event:'command',func,args}), '*')}
-let ytCurrentTime=0;window.addEventListener('message',ev=>{if(!ev.origin.includes('youtube.com'))return;try{const d=typeof ev.data==='string'?JSON.parse(ev.data):ev.data;if(d&&d.info&&typeof d.info.currentTime==='number')ytCurrentTime=d.info.currentTime}catch(_){}});
-$('playPauseBtn').addEventListener('click',()=>{const m=activeMedia();if(m){if(m.paused)m.play();else m.pause()}else if(isYouTube()){ytCommand('playVideo');notify('تم إرسال أمر التشغيل للمشغّل')}});
-$('back10Btn').addEventListener('click',()=>{const m=activeMedia();if(m)m.currentTime=Math.max(0,m.currentTime-10);else if(isYouTube())ytCommand('seekTo',[Math.max(0,ytCurrentTime-10),true])});
-$('forward10Btn').addEventListener('click',()=>{const m=activeMedia();if(m)m.currentTime=Math.min(m.duration||Infinity,m.currentTime+10);else if(isYouTube())ytCommand('seekTo',[ytCurrentTime+10,true])});
-$('speedSelect').addEventListener('change',()=>{const rate=Number($('speedSelect').value),m=activeMedia();if(m)m.playbackRate=rate;else if(isYouTube())ytCommand('setPlaybackRate',[rate])});
-$('volumeControl').addEventListener('input',()=>{const m=activeMedia();if(m)m.volume=Number($('volumeControl').value);else if(isYouTube())ytCommand('setVolume',[Math.round(Number($('volumeControl').value)*100)])});
-$('qualitySelect').addEventListener('change',()=>{const v=$('qualitySelect').value;if(isYouTube())ytCommand('setPlaybackQuality',[v]);else notify('الجودة في الملفات المباشرة يحددها الملف أو الخادم');notify('لو لم تتغير الجودة، استخدم ⚙ داخل مشغّل يوتيوب')});
-$('captionSelect').addEventListener('change',()=>{if(isYouTube())ytCommand($('captionSelect').value==='on'?'loadModule':'unloadModule',['captions']);else notify('الترجمة للملفات المباشرة تحتاج ملف ترجمة WebVTT منفصلًا')});
-
-function stop(){$('customControls').classList.add('hidden');current=null;$('playerArea').innerHTML='<div class="player" style="display:grid;place-items:center;color:#a6b5c9">▶ اختر فيديو لبدء المشاهدة</div>';$('nowTitle').textContent='أهلاً بك في مكتبة عمرو محمد';$('nowDescription').textContent='اختر فيديو من المكتبة لبدء المشاهدة.';$('playerLabel').textContent='اختر محتوى من مكتبتك'}
+function activeMedia(){return $('mediaMount').querySelector('video, audio')}
+function isYouTube(){return !!(current&&current.type==='youtube'&&ytPlayer)}
+function ytCall(method,...args){try{if(isYouTube()&&typeof ytPlayer[method]==='function')ytPlayer[method](...args)}catch(e){console.warn('YouTube command failed',method,e)}}
+$('playPauseBtn').addEventListener('click',()=>{
+ const m=activeMedia();
+ if(m){if(m.paused)m.play().catch(()=>{});else m.pause()}
+ else if(isYouTube()){const state=ytPlayer.getPlayerState();if(state===1)ytCall('pauseVideo');else ytCall('playVideo')}
+});
+$('back10Btn').addEventListener('click',()=>{
+ const m=activeMedia();if(m)m.currentTime=Math.max(0,m.currentTime-10);
+ else if(isYouTube())ytCall('seekTo',Math.max(0,ytPlayer.getCurrentTime()-10),true);
+});
+$('forward10Btn').addEventListener('click',()=>{
+ const m=activeMedia();if(m)m.currentTime=Math.min(m.duration||Infinity,m.currentTime+10);
+ else if(isYouTube())ytCall('seekTo',ytPlayer.getCurrentTime()+10,true);
+});
+$('speedSelect').addEventListener('change',()=>{
+ const rate=Number($('speedSelect').value),m=activeMedia();
+ if(m)m.playbackRate=rate;else if(isYouTube())ytCall('setPlaybackRate',rate);
+});
+$('volumeControl').addEventListener('input',()=>{
+ const volume=Number($('volumeControl').value),m=activeMedia();
+ if(m)m.volume=volume;else if(isYouTube())ytCall('setVolume',Math.round(volume*100));
+});
+$('qualitySelect').addEventListener('change',()=>{
+ const v=$('qualitySelect').value;
+ if(isYouTube()){if(v==='default')ytCall('setPlaybackQuality','default');else ytCall('setPlaybackQuality',v)}
+ else notify('الجودة يحددها الملف أو الخادم');
+});
+$('captionSelect').addEventListener('change',()=>{
+ if(isYouTube()){
+   if($('captionSelect').value==='on'){ytCall('loadModule','captions');setTimeout(()=>{try{ytPlayer.setOption('captions','track',{})}catch(_){}},250)}
+   else {ytCall('unloadModule','captions')}
+ }else notify('الترجمة للملفات المباشرة تحتاج ملف ترجمة منفصلًا');
+});
+$('fullscreenBtn').addEventListener('click',async()=>{
+ const stage=$('playerArea');
+ try{
+   if(document.fullscreenElement){await document.exitFullscreen()}
+   else if(stage.requestFullscreen){await stage.requestFullscreen()}
+   else if(stage.webkitRequestFullscreen){stage.webkitRequestFullscreen()}
+   else notify('التكبير الكامل غير مدعوم في هذا المتصفح');
+ }catch(e){notify('لم يسمح المتصفح بالتكبير الكامل')}
+});
+document.addEventListener('fullscreenchange',()=>{
+ $('fullscreenBtn').textContent=document.fullscreenElement?'⛶':'⛶';
+ $('fullscreenBtn').title=document.fullscreenElement?'إنهاء التكبير':'تكبير المشغل';
+});
+function stop(){if(ytPlayer){try{ytPlayer.destroy()}catch(_){}ytPlayer=null}$('customControls').classList.add('hidden');current=null;$('mediaMount').innerHTML='<div class="player-placeholder">▶ اختر فيديو لبدء المشاهدة</div>';$('nowTitle').textContent='أهلاً بك في مكتبة عمرو محمد';$('nowDescription').textContent='اختر فيديو من المكتبة لبدء المشاهدة.';$('playerLabel').textContent='اختر محتوى من مكتبتك';syncPlayButton(-1)}
 function removeItem(id){const item=items.find(x=>x.id===id);if(!item)return;if(!confirm('حذف «'+item.title+'» من المكتبة؟'))return;items=items.filter(x=>x.id!==id);if(current&&current.id===id)stop();save();render();notify('تم حذف المحتوى')}
 $('searchInput').addEventListener('input',render);$('filterType').addEventListener('change',render);$('filterCategory').addEventListener('change',render);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';$('filterType').value='all';$('filterCategory').value='all';render()});
 $('openOriginal').addEventListener('click',()=>{if(current)notify('الفيديو الحالي: '+current.title)});$('stopPlayer').addEventListener('click',stop);
 
 $('openOriginal').disabled=true;updateStats();render();
-// اطلب تحديث الوقت من واجهة يوتيوب حتى تعمل أزرار التقديم والرجوع.
-setInterval(()=>{if(isYouTube())ytCommand('getCurrentTime')},1000);
 })();
 </script>
 </body>
